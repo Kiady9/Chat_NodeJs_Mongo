@@ -1,0 +1,47 @@
+<%- include('layout.ejs'); %>
+    <link href="/style.css" rel="stylesheet" id="css">
+    <div class="container">
+        <div class="row justify-content-center">
+
+            <!-- <h3>My name is
+                <%= user.name %>
+            </h3> &nbsp;
+            <h3>I stay at
+                <%= user.location %>
+            </h3> <br><br> -->
+
+            <ul id="messages"></ul>
+            <form id="form" action=""> <input id="input" autocomplete="off" /><button>Send</button> </form>
+            <br><br>
+        </div>
+    </div>
+    <div>
+        <a href="/logout"> <button type="submit" class="btn btn-primary btn-lg btn-block login-button">Logout</button> </a>
+    </div>
+
+    <script src="https://cdn.socket.io/4.4.0/socket.io.min.js" integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj" crossorigin="anonymous"></script>
+
+    <script>
+        var socket = io();
+        var messages = document.getElementById('messages');
+        var form = document.getElementById('form');
+        var input = document.getElementById('input');
+        form.addEventListener('submit', function(e) {
+            //alert(input.value);
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('chat message', "<%= user.name %>" + " : " + input.value);
+                input.value = '';
+            }
+        });
+        socket.on('chat message', function(msg) {
+            var item = document.createElement('li');
+            item.textContent = msg;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+    </script>
+
+    </body>
+
+    </html>
